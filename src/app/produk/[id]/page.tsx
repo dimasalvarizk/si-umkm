@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Prisma Singleton
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
@@ -11,9 +10,16 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
-export default async function DetailProdukPage(props: { params: { id: string } }) {
-  const { id } = await props.params;
-  const produkId = parseInt(id, 10);
+// ✅ Ubah definisi Props supaya TypeScript tidak bingung
+type Params = { id: string };
+type Props = { params: Params } | { params: Promise<Params> };
+
+export default async function DetailProdukPage(props: Props) {
+  // ✅ Deteksi apakah params adalah Promise dan resolve
+  const params: Params =
+    "then" in props.params ? await props.params : props.params;
+
+  const produkId = parseInt(params.id, 10);
 
   if (isNaN(produkId)) {
     return (
@@ -23,7 +29,9 @@ export default async function DetailProdukPage(props: { params: { id: string } }
     );
   }
 
-  const produk = await prisma.produk.findUnique({ where: { id: produkId } });
+  const produk = await prisma.produk.findUnique({
+    where: { id: produkId },
+  });
 
   if (!produk) {
     return (
@@ -44,6 +52,7 @@ export default async function DetailProdukPage(props: { params: { id: string } }
             alt={`Gambar produk ${produk.nama}`}
             width={800}
             height={400}
+            priority
             className="rounded mb-6 object-cover w-full max-h-[400px]"
           />
         ) : (
