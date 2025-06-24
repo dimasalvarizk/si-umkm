@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Prisma Singleton
+// Prisma singleton
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
@@ -11,9 +11,13 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
-export default async function DetailProdukPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params; // ✅ INI HARUS DI-AWAIT di Next.js 15+
-  const produkId = parseInt(id, 10);
+type Props = {
+  params: { id: string };
+};
+
+export default async function DetailProdukPage({ params }: Props) {
+  // ✅ Tanpa await
+  const produkId = parseInt(params.id, 10);
 
   if (isNaN(produkId)) {
     return (
@@ -23,7 +27,9 @@ export default async function DetailProdukPage({ params }: { params: Promise<{ i
     );
   }
 
-  const produk = await prisma.produk.findUnique({ where: { id: produkId } });
+  const produk = await prisma.produk.findUnique({
+    where: { id: produkId },
+  });
 
   if (!produk) {
     return (
@@ -37,6 +43,7 @@ export default async function DetailProdukPage({ params }: { params: Promise<{ i
     <main className="min-h-screen bg-white px-4 py-10 flex justify-center items-start">
       <div className="w-full max-w-3xl bg-gray-50 p-8 rounded-2xl shadow border border-gray-200">
         <h1 className="text-3xl font-bold text-blue-600 mb-4">{produk.nama}</h1>
+
         {produk.gambar ? (
           <Image
             src={`/uploads/${produk.gambar}`}
