@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Produk {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  deskripsi String
+  harga     Int
+  gambar    String?
+  email     String
+  createdAt DateTime @default(now())
+
+  review    Review[] // ← relasi: satu produk punya banyak review
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  komentar  String
+  rating    Int
+  email     String
+  produk    Produk   @relation(fields: [produkId], references: [id])
+  produkId  Int
+  createdAt DateTime @default(now())
+}
+
+model Pelatihan {
+  id          Int           @id @default(autoincrement())
+  judul       String
+  deskripsi   String
+  tanggal     DateTime
+  lokasi      String
+  kuota       Int
+  createdAt   DateTime      @default(now())
+  pendaftaran Pendaftaran[] // ⬅️ relasi balik (one-to-many)
+}
+
+model Pendaftaran {
+  id           Int       @id @default(autoincrement())
+  nama         String
+  email        String
+  alasan       String
+  pelatihan    Pelatihan @relation(fields: [pelatihanId], references: [id])
+  pelatihanId  Int
+}
+

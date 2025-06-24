@@ -1,0 +1,59 @@
+{
+  "name": "si-umkm",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.13.8",
+    "@hookform/resolvers": "^5.1.1",
+    "@next-auth/firebase-adapter": "^2.0.1",
+    "@prisma/client": "^6.10.0",
+    "apollo-server-micro": "^3.13.0",
+    "axios": "^1.10.0",
+    "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
+    "csrf": "^3.1.0",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.5.0",
+    "firebase": "^11.9.1",
+    "firebase-admin": "^13.4.0",
+    "formidable": "^3.5.4",
+    "graphql": "^16.11.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "micro-cors": "^0.1.1",
+    "mongoose": "^8.16.0",
+    "mysql2": "^3.14.1",
+    "next": "15.3.3",
+    "next-auth": "^4.24.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.58.1",
+    "xss": "^1.0.15",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/csurf": "^1.11.5",
+    "@types/formidable": "^3.4.5",
+    "@types/next": "^8.0.7",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "prisma": "^6.10.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  },
+  "description": "UAS PEMOGRAMAN BERBASIS FRAMEWORK",
+  "main": "next.config.js",
+  "keywords": [
+    "umkm"
+  ],
+  "author": "Dimas Alva Rizki",
+  "license": "ISC"
+}
