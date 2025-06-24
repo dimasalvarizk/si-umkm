@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Prisma singleton
+// Prisma Singleton
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
@@ -11,13 +11,9 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
-type Props = {
-  params: { id: string };
-};
-
-export default async function DetailProdukPage({ params }: Props) {
-  // ✅ Tanpa await
-  const produkId = parseInt(params.id, 10);
+export default async function DetailProdukPage(props: { params: { id: string } }) {
+  const { id } = await props.params;
+  const produkId = parseInt(id, 10);
 
   if (isNaN(produkId)) {
     return (
@@ -27,9 +23,7 @@ export default async function DetailProdukPage({ params }: Props) {
     );
   }
 
-  const produk = await prisma.produk.findUnique({
-    where: { id: produkId },
-  });
+  const produk = await prisma.produk.findUnique({ where: { id: produkId } });
 
   if (!produk) {
     return (
@@ -50,7 +44,6 @@ export default async function DetailProdukPage({ params }: Props) {
             alt={`Gambar produk ${produk.nama}`}
             width={800}
             height={400}
-            priority
             className="rounded mb-6 object-cover w-full max-h-[400px]"
           />
         ) : (
