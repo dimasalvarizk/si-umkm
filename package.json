@@ -48,7 +48,7 @@
     "@types/react-dom": "^19",
     "prisma": "^6.10.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.8.3"
   },
   "description": "UAS PEMOGRAMAN BERBASIS FRAMEWORK",
   "main": "next.config.js",
