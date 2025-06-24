@@ -5,20 +5,22 @@ import type { Pelatihan } from '@prisma/client';
 export const revalidate = 60;
 
 export default async function PelatihanListPage() {
-  const pelatihan = await prisma.pelatihan.findMany({
+  const pelatihan: Pelatihan[] = await prisma.pelatihan.findMany({
     orderBy: { tanggal: 'asc' },
   });
 
   return (
     <main className="min-h-screen bg-white px-4 py-10 flex justify-center">
       <div className="w-full max-w-5xl">
-        <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">Pelatihan & Program UMKM</h1>
+        <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
+          Pelatihan & Program UMKM
+        </h1>
 
         {pelatihan.length === 0 ? (
           <p className="text-center text-gray-600">Belum ada pelatihan tersedia saat ini.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {pelatihan.map((item: Pelatihan) => (
+            {pelatihan.map((item) => (
               <div
                 key={item.id}
                 className="bg-gray-50 border border-gray-200 p-6 rounded-xl shadow hover:shadow-md transition"

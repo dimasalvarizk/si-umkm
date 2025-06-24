@@ -4,4 +4,8 @@ const nextConfig = {
   // jangan tambahkan `api` di sini
 };
 
-module.exports = nextConfig;
+// next.config.js
+module.exports = {
+  output: 'standalone', // penting untuk Docker
+};
+

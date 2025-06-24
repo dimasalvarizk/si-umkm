@@ -6,6 +6,8 @@ const prisma = new PrismaClient();
 
 export const revalidate = 30; // Regenerasi statis setiap 30 detik
 
+type ProdukType = Awaited<ReturnType<typeof prisma.produk.findMany>>[number];
+
 export default async function KatalogProdukPage() {
   const produk = await prisma.produk.findMany({
     orderBy: { createdAt: 'desc' },
@@ -22,7 +24,7 @@ export default async function KatalogProdukPage() {
           <p className="text-center text-gray-500">Tidak ada produk ditemukan.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {produk.map((item) => (
+            {produk.map((item: ProdukType) => (
               <div
                 key={item.id}
                 className="bg-gray-50 border border-gray-200 rounded-2xl p-4 shadow hover:shadow-md transition"

@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'; // pastikan prisma sudah di-setup
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    verifyAdmin(req);
+    await verifyAdmin(req, res);
 
     // Ambil semua produk dari database
     const produk = await prisma.produk.findMany({

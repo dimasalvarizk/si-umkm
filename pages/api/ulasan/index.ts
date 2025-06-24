@@ -31,9 +31,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    const formatted = ulasan.map((u) => ({
+    // Tambahkan tipe eksplisit untuk 'u' agar TypeScript tidak error
+    const formatted = ulasan.map((u: typeof ulasan[number]) => ({
       id: u.id,
-      komentar: u.komentar, // ✅ perbaikan di sini
+      komentar: u.komentar,
       rating: u.rating,
       namaProduk: u.produk?.nama ?? '(Tidak diketahui)',
       reviewerEmail: u.email,

@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { id } = req.query;
 
   try {
-    verifyAdmin(req);
+    await verifyAdmin(req, res);
     const produkId = Number(id);
     if (isNaN(produkId)) return res.status(400).json({ error: 'ID produk tidak valid' });
 

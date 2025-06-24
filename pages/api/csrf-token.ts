@@ -1,3 +1,4 @@
+// pages/api/csrf-token.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import csurf from 'csurf';
 import { serialize } from 'cookie';
@@ -17,7 +18,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.setHeader(
       'Set-Cookie',
       serialize('XSRF-TOKEN', token, {
-        httpOnly: false, // client-side bisa baca
+        httpOnly: false,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',

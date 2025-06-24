@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Prisma Singleton
+// Prisma singleton
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
@@ -11,9 +11,14 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
-export default async function DetailProdukPage(props: { params: { id: string } }) {
-  const { id } = await props.params;
-  const produkId = parseInt(id, 10);
+type Props = {
+  params: any; // sementara pakai any agar tidak error di build
+};
+
+export default async function DetailProdukPage({ params }: Props) {
+  const resolvedParams = typeof params.then === 'function' ? await params : params;
+
+  const produkId = parseInt(resolvedParams.id, 10);
 
   if (isNaN(produkId)) {
     return (
@@ -23,7 +28,9 @@ export default async function DetailProdukPage(props: { params: { id: string } }
     );
   }
 
-  const produk = await prisma.produk.findUnique({ where: { id: produkId } });
+  const produk = await prisma.produk.findUnique({
+    where: { id: produkId },
+  });
 
   if (!produk) {
     return (
