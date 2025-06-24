@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Prisma Singleton
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
@@ -10,16 +11,9 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
-// ✅ Ubah definisi Props supaya TypeScript tidak bingung
-type Params = { id: string };
-type Props = { params: Params } | { params: Promise<Params> };
-
-export default async function DetailProdukPage(props: Props) {
-  // ✅ Deteksi apakah params adalah Promise dan resolve
-  const params: Params =
-    "then" in props.params ? await props.params : props.params;
-
-  const produkId = parseInt(params.id, 10);
+export default async function DetailProdukPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params; // ✅ INI HARUS DI-AWAIT di Next.js 15+
+  const produkId = parseInt(id, 10);
 
   if (isNaN(produkId)) {
     return (
@@ -29,9 +23,7 @@ export default async function DetailProdukPage(props: Props) {
     );
   }
 
-  const produk = await prisma.produk.findUnique({
-    where: { id: produkId },
-  });
+  const produk = await prisma.produk.findUnique({ where: { id: produkId } });
 
   if (!produk) {
     return (
@@ -45,7 +37,6 @@ export default async function DetailProdukPage(props: Props) {
     <main className="min-h-screen bg-white px-4 py-10 flex justify-center items-start">
       <div className="w-full max-w-3xl bg-gray-50 p-8 rounded-2xl shadow border border-gray-200">
         <h1 className="text-3xl font-bold text-blue-600 mb-4">{produk.nama}</h1>
-
         {produk.gambar ? (
           <Image
             src={`/uploads/${produk.gambar}`}
